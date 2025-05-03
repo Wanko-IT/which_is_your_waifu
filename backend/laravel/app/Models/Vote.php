@@ -18,6 +18,7 @@ class Vote extends Model
         'character_id',
         'user_ip',
         'user_agent',
+        'voting_period_id',
     ];
 
     /**
@@ -26,5 +27,13 @@ class Vote extends Model
     public function character()
     {
         return $this->belongsTo(Character::class);
+    }
+    
+    /**
+     * Get the voting period that owns the vote.
+     */
+    public function votingPeriod()
+    {
+        return $this->belongsTo(VotingPeriod::class);
     }
 }
