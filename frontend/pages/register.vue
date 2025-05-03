@@ -3,14 +3,26 @@
     <div class="w-full max-w-md space-y-8">
       <div>
         <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-          ログイン
+          アカウント登録
         </h2>
         <p class="mt-2 text-center text-sm text-gray-600">
-          あなたの嫁を選ぶために、ログインしてください
+          あなたの嫁を選ぶために、新しいアカウントを作成してください
         </p>
       </div>
-      <form class="mt-8 space-y-6" @submit.prevent="login">
+      <form class="mt-8 space-y-6" @submit.prevent="register">
         <div class="-space-y-px rounded-md shadow-sm">
+          <div>
+            <label for="name" class="sr-only">名前</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              required
+              v-model="name"
+              class="relative block w-full rounded-t-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-pink-600 sm:text-sm sm:leading-6"
+              placeholder="名前"
+            />
+          </div>
           <div>
             <label for="email-address" class="sr-only">メールアドレス</label>
             <input
@@ -20,7 +32,7 @@
               autocomplete="email"
               required
               v-model="email"
-              class="relative block w-full rounded-t-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-pink-600 sm:text-sm sm:leading-6"
+              class="relative block w-full border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-pink-600 sm:text-sm sm:leading-6"
               placeholder="メールアドレス"
             />
           </div>
@@ -30,29 +42,25 @@
               id="password"
               name="password"
               type="password"
-              autocomplete="current-password"
+              autocomplete="new-password"
               required
               v-model="password"
-              class="relative block w-full rounded-b-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-pink-600 sm:text-sm sm:leading-6"
+              class="relative block w-full border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-pink-600 sm:text-sm sm:leading-6"
               placeholder="パスワード"
             />
           </div>
-        </div>
-
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
+          <div>
+            <label for="password-confirmation" class="sr-only">パスワード（確認）</label>
             <input
-              id="remember-me"
-              name="remember-me"
-              type="checkbox"
-              v-model="rememberMe"
-              class="h-4 w-4 rounded border-gray-300 text-pink-600 focus:ring-pink-600"
+              id="password-confirmation"
+              name="password_confirmation"
+              type="password"
+              autocomplete="new-password"
+              required
+              v-model="passwordConfirmation"
+              class="relative block w-full rounded-b-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-pink-600 sm:text-sm sm:leading-6"
+              placeholder="パスワード（確認）"
             />
-            <label for="remember-me" class="ml-2 block text-sm text-gray-900">ログイン状態を保存</label>
-          </div>
-
-          <div class="text-sm">
-            <a href="#" class="font-medium text-pink-600 hover:text-pink-500">パスワードを忘れましたか？</a>
           </div>
         </div>
 
@@ -66,15 +74,15 @@
                 <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
               </svg>
             </span>
-            ログイン
+            登録する
           </button>
         </div>
       </form>
       
       <div class="text-center mt-4">
         <p class="text-sm text-gray-600">
-          アカウントをお持ちでないですか？
-          <nuxt-link to="/register" class="font-medium text-pink-600 hover:text-pink-500">新規登録</nuxt-link>
+          すでにアカウントをお持ちですか？
+          <nuxt-link to="/login" class="font-medium text-pink-600 hover:text-pink-500">ログイン</nuxt-link>
         </p>
       </div>
       
@@ -90,30 +98,29 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+const name = ref('')
 const email = ref('')
 const password = ref('')
-const rememberMe = ref(false)
+const passwordConfirmation = ref('')
 const error = ref('')
 
-// リダイレクト先を取得
-const getRedirectPath = () => {
-  // URLからリダイレクト先を取得
-  const route = router.currentRoute.value
-  const redirectPath = route.query.redirect || '/'
-  return redirectPath
-}
-
-const login = async () => {
+const register = async () => {
   try {
     error.value = ''
+    
+    // パスワード確認チェック
+    if (password.value !== passwordConfirmation.value) {
+      error.value = 'パスワードが一致しません'
+      return
+    }
     
     // CSRF保護のためにトークンを取得
     await fetch('/sanctum/csrf-cookie', {
       credentials: 'include'
     })
     
-    // ログインリクエスト
-    const response = await fetch('/api/login', {
+    // 登録リクエスト
+    const response = await fetch('/api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -121,24 +128,24 @@ const login = async () => {
       },
       credentials: 'include',
       body: JSON.stringify({
+        name: name.value,
         email: email.value,
         password: password.value,
-        remember: rememberMe.value
+        password_confirmation: passwordConfirmation.value
       })
     })
     
     const data = await response.json()
     
     if (!response.ok) {
-      throw new Error(data.message || 'ログインに失敗しました')
+      throw new Error(data.message || '登録に失敗しました')
     }
     
-    // ログイン成功
-    const redirectPath = getRedirectPath()
-    router.push(redirectPath)
+    // 登録成功
+    router.push('/')
   } catch (err) {
-    error.value = err.message || 'ログイン中にエラーが発生しました'
-    console.error('Login error:', err)
+    error.value = err.message || '登録中にエラーが発生しました'
+    console.error('Registration error:', err)
   }
 }
 </script>
