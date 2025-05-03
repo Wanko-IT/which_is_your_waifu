@@ -114,11 +114,6 @@ const register = async () => {
       return
     }
     
-    // CSRF保護のためにトークンを取得
-    await fetch('/sanctum/csrf-cookie', {
-      credentials: 'include'
-    })
-    
     // 登録リクエスト
     const response = await fetch(useRuntimeConfig().public.apiBase + '/api/register', {
       method: 'POST',

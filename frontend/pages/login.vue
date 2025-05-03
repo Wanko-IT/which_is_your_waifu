@@ -107,13 +107,8 @@ const login = async () => {
   try {
     error.value = ''
     
-    // CSRF保護のためにトークンを取得
-    await fetch('/sanctum/csrf-cookie', {
-      credentials: 'include'
-    })
-    
     // ログインリクエスト
-    const response = await fetch('/api/login', {
+    const response = await fetch(useRuntimeConfig().public.apiBase + '/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
