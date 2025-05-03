@@ -108,7 +108,7 @@ const login = async () => {
     error.value = ''
     
     // ログインリクエスト
-    const response = await fetch(useRuntimeConfig().public.apiBase + '/login', {
+    const response = await fetch(useRuntimeConfig().public.apiBase + '/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

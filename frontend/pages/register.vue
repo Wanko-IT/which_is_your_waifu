@@ -115,7 +115,7 @@ const register = async () => {
     }
     
     // 登録リクエスト
-    const response = await fetch(useRuntimeConfig().public.apiBase + '/register', {
+    const response = await fetch(useRuntimeConfig().public.apiBase + '/api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
