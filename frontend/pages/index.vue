@@ -35,7 +35,7 @@
       <div class="w-full md:w-2/5 border rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow bg-white">
         <img :src="currentMatchup[0].image_url || '/placeholder.png'" :alt="currentMatchup[0].name" class="w-full h-64 object-cover rounded mb-4">
         <h3 class="text-xl font-bold mb-2 text-center">{{ currentMatchup[0].name }}</h3>
-        <p v-if="currentMatchup[0].description" class="text-sm text-gray-600 mb-4 text-center">{{ currentMatchup[0].description }}</p>
+        <div v-if="currentMatchup[0].description" class="text-sm text-gray-600 mb-4 text-center">{{ currentMatchup[0].description }}</div>
         <button @click="voteForCharacter(currentMatchup[0].id)" class="bg-pink-500 hover:bg-pink-600 text-white py-3 px-4 rounded w-full text-lg font-semibold">
           投票する
         </button>
@@ -52,7 +52,7 @@
       <div class="w-full md:w-2/5 border rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow bg-white">
         <img :src="currentMatchup[1].image_url || '/placeholder.png'" :alt="currentMatchup[1].name" class="w-full h-64 object-cover rounded mb-4">
         <h3 class="text-xl font-bold mb-2 text-center">{{ currentMatchup[1].name }}</h3>
-        <p v-if="currentMatchup[1].description" class="text-sm text-gray-600 mb-4 text-center">{{ currentMatchup[1].description }}</p>
+        <div v-if="currentMatchup[1].description" class="text-sm text-gray-600 mb-4 text-center">{{ currentMatchup[1].description }}</div>
         <button @click="voteForCharacter(currentMatchup[1].id)" class="bg-pink-500 hover:bg-pink-600 text-white py-3 px-4 rounded w-full text-lg font-semibold">
           投票する
         </button>
