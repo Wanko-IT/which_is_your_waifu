@@ -139,7 +139,7 @@ onMounted(async () => {
     console.error('Error fetching data:', error)
     loading.value = false
   }
-}
+})
 
 // 次のマッチアップを設定
 const setupNextMatchup = () => {
