@@ -21,10 +21,20 @@ class VoteController extends Controller
             'character_id' => 'required|exists:characters,id',
         ]);
 
+        $now = now();
+        $votingPeriod = \App\Models\VotingPeriod::where('start_date', '<=', $now)
+            ->where('end_date', '>=', $now)
+            ->first();
+
         $vote = new Vote();
         $vote->character_id = $request->character_id;
         $vote->user_ip = $request->ip();
         $vote->user_agent = $request->userAgent();
+        
+        if ($votingPeriod) {
+            $vote->voting_period_id = $votingPeriod->id;
+        }
+        
         $vote->save();
 
         return response()->json(['message' => 'Vote recorded successfully'], 201);
