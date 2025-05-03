@@ -4,20 +4,23 @@
     <p class="subtitle">Vote for your favorite character!</p>
     
     <div class="characters-grid">
-      <div v-for="character in characters" :key="character.id" class="character-card">
-        <img :src="character.image_url || '/placeholder.png'" :alt="character.name" class="character-image">
-        <h3 class="character-name">{{ character.name }}</h3>
-        <p v-if="character.description" class="character-description">{{ character.description }}</p>
-        <button @click="voteForCharacter(character.id)" class="vote-button">
-          Vote for {{ character.name }}
-        </button>
-      </div>
+      <CharacterCard 
+        v-for="character in characters" 
+        :key="character.id" 
+        :character="character"
+        @vote="voteForCharacter"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import CharacterCard from '~/components/CharacterCard.vue'
+
 export default {
+  components: {
+    CharacterCard
+  },
   data() {
     return {
       characters: []
