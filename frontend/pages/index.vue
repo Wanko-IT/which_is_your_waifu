@@ -5,13 +5,7 @@
         <h1 class="text-2xl font-bold">Which Is Your Waifu?</h1>
         <p class="text-gray-600">あなたの嫁を選んでください！</p>
       </div>
-      <div class="flex space-x-3">
-        <nuxt-link to="/history" class="border border-pink-500 text-pink-500 hover:bg-pink-50 py-2 px-4 rounded-md text-sm flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-          </svg>
-          過去の結果
-        </nuxt-link>
+      <div v-if="!isAuthenticated" class="flex space-x-3">
         <nuxt-link to="/login" class="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-md text-sm">
           ログイン
         </nuxt-link>
@@ -35,7 +29,7 @@
         結果を見る
       </button>
     </div>
-    
+
     <div v-else class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8">
       <!-- 左側のキャラクター -->
       <div class="w-full md:w-2/5 border rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow bg-white">
@@ -70,6 +64,12 @@
         スキップして次へ
       </button>
     </div>
+  </div>
+
+  <div class="text-center py-12">
+    <button @click="$router.push('/history')" class="bg-pink-500 hover:bg-pink-600 text-white py-2 px-6 rounded">
+      過去の結果を見る
+    </button>
   </div>
 </template>
 
