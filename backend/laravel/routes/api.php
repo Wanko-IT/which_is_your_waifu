@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CharacterController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\VotingPeriodController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,10 @@ use App\Http\Controllers\VotingPeriodController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::get('/characters', [CharacterController::class, 'index']);
 Route::get('/characters/{character}', [CharacterController::class, 'show']);
